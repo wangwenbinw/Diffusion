@@ -28,13 +28,30 @@ sample images, and loss history under `Unet/outputs`.
 - `Unet/src/models/`: UNet architectures and shared modules.
 - `Unet/src/diffusion/`: diffusion training and sampling.
 
-Code is intended for GitHub. Datasets and training outputs are intended for
-Hugging Face and are excluded from Git by `.gitignore`.
+GitHub hosts code and documentation. Hugging Face hosts the dataset and only
+the two final checkpoints. Data and training outputs are excluded from Git by
+`.gitignore`.
 
 Public Hugging Face repositories:
 
 - Dataset: https://huggingface.co/datasets/Wenbinwang/cifar10-data
-- Training outputs: https://huggingface.co/Wenbinwang/diffusion-outputs
+- Final checkpoints: https://huggingface.co/Wenbinwang/diffusion-outputs
+
+## Final checkpoint policy
+
+Only these final checkpoints are selected for publication on Hugging Face:
+
+| Model | Checkpoint path in the Hugging Face repository |
+| --- | --- |
+| Unconditional DDPM | `ddpm_with_attention_ema/checkpoints/ddpm_final.pt` |
+| Conditional DDPM | `conditional_ddpm_with_attention_ema/checkpoints/conditional_ddpm_final.pt` |
+
+Each file is about 3.11 GiB (about 6.2 GiB combined). Intermediate epoch
+checkpoints, sample images, and training-history CSV files are not published.
+The final files retain the original full checkpoint format: model and EMA
+weights, optimizer and scheduler state, epoch, and losses. Use
+`ema_model_state_dict` for EMA inference weights or `model_state_dict` for the
+training model weights, with the matching architectures in this repository.
 
 To restore them, install the Hugging Face CLI and run these commands from the
 project root:
@@ -42,8 +59,5 @@ project root:
 ```bash
 pip install huggingface_hub
 hf download Wenbinwang/cifar10-data --repo-type dataset --local-dir Unet/data
-hf download Wenbinwang/diffusion-outputs --local-dir Unet/outputs
+hf download Wenbinwang/diffusion-outputs ddpm_with_attention_ema/checkpoints/ddpm_final.pt conditional_ddpm_with_attention_ema/checkpoints/conditional_ddpm_final.pt --local-dir Unet/outputs
 ```
-
-The training outputs include optimizer, scheduler, model, and EMA state in
-PyTorch `.pt` checkpoints. They use the custom architectures in this repository.
