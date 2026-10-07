@@ -1,0 +1,22 @@
+# Datasets and training artifacts are hosted on Hugging Face.
+data/
+outputs/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# Python caches and local environments.
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Local editor settings and credentials.
+.vscode/
+.idea/
+.env
+.env.*
+!.env.example
+.cache/
